@@ -16,10 +16,3 @@ export const CreateReservationDto = z.object({
 });
 
 export type CreateReservationDto = z.infer<typeof CreateReservationDto>;
-
-export const ReservationResponseDto = CreateReservationDto.extend({
-  id: z.number(),
-  reservationNumber: z.string()
-});
-
-export type ReservationResponseDto = z.infer<typeof ReservationResponseDto>;

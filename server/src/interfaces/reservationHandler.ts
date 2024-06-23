@@ -7,4 +7,8 @@ export class ReservationHandler {
   async handleCreateReservation(dto: CreateReservationDto): Promise<ReservationResponseDto> {
     return this.reservationAdapter.createReservation(dto);
   }
+
+  async handleGetReservation(id: string): Promise<ReservationResponseDto | null> {
+    return this.reservationAdapter.getReservation(id);
+  }
 }

@@ -1,4 +1,5 @@
 import { initTRPC } from '@trpc/server';
+import { z } from 'zod';
 import { ReservationHandler } from './reservationHandler';
 import { CreateReservationDto } from '../application/dto/reservationDto';
 
@@ -9,6 +10,11 @@ export const appRouter = (reservationHandler: ReservationHandler) => t.router({
     .input(CreateReservationDto)
     .mutation(async ({ input }) => {
       return reservationHandler.handleCreateReservation(input);
+    }),
+  getReservation: t.procedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      return reservationHandler.handleGetReservation(input.id);
     }),
 });
 

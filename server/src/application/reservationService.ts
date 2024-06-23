@@ -24,6 +24,7 @@ export class ReservationService {
     );
 
     const savedReservation = await this.reservationRepository.createReservation(reservation);
+    
 
     return {
       id: savedReservation.id,
@@ -36,5 +37,17 @@ export class ReservationService {
   private generateReservationNumber(): string {
     // Implementation for generating unique reservation number
     return `${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}${Math.floor(1000 + Math.random() * 9000)}`;
+  }
+
+  async getReservation(id: string): Promise<ReservationResponseDto | null> {
+    const reservation = await this.reservationRepository.findReservationById(id);
+    if (!reservation) return null;
+    
+    return {
+      id: reservation.id,
+      reservationNumber: reservation.reservationNumber,
+      name: reservation.name,
+      // ... 나머지 필드들
+    };
   }
 }
