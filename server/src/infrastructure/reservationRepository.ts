@@ -1,16 +1,22 @@
-import { Repository, EntityRepository } from 'typeorm';
-import { Reservation, ReservationStatus } from '../domain';
+// src/infrastructure/reservationRepository.ts
 
+import { Repository, DataSource } from 'typeorm';
+import { Reservation } from '../domain/reservation';
+import { Injectable } from '@nestjs/common';
 
-@EntityRepository(Reservation)
-export class ReservationRepository extends Repository<Reservation> {
+@Injectable()
+export class ReservationRepository {
+  private repository: Repository<Reservation>;
+
+  constructor(private dataSource: DataSource) {
+    this.repository = this.dataSource.getRepository(Reservation);
+  }
+
   async createReservation(reservation: Reservation): Promise<Reservation> {
-    return this.save(reservation);
+    return this.repository.save(reservation);
   }
 
   async findReservationById(id: string): Promise<Reservation | null> {
-    // return this.findOne({ where: { id } });
-    // 또는 TypeORM 0.3.x 버전을 사용하는 경우:
-    return this.findOneBy({ id });
+    return this.repository.findOneBy({ id });
   }
 }
