@@ -39,7 +39,7 @@ export class ReservationService {
     return `${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}${Math.floor(1000 + Math.random() * 9000)}`;
   }
 
-  async getReservation(id: string): Promise<ReservationResponseDto | null> {
+  async getReservation(id: number): Promise<ReservationResponseDto | null> {
     const reservation = await this.reservationRepository.findReservationById(id);
     if (!reservation) return null;
     

@@ -16,7 +16,7 @@ export class ReservationRepository {
     return this.repository.save(reservation);
   }
 
-  async findReservationById(id: string): Promise<Reservation | null> {
+  async findReservationById(id: number): Promise<Reservation | null> {
     return this.repository.findOneBy({ id });
   }
 }
