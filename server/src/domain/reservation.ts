@@ -2,6 +2,12 @@
 
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+export enum ReservationStatus {
+  REQUEST = 'REQUEST',
+  CONFIRMED = 'CONFIRMED',
+  CANCELLED = 'CANCELLED'
+}
+
 @Entity()
 export class Reservation {
   @PrimaryGeneratedColumn()
@@ -43,8 +49,12 @@ export class Reservation {
   @Column('decimal', { precision: 10, scale: 2 })
   pricePerDay: number;
 
-  @Column()
-  reservationStatus: string;
+  @Column({
+    type: 'enum',
+    enum: ReservationStatus,
+    default: ReservationStatus.REQUEST
+  })
+  reservationStatus: ReservationStatus;
 
   constructor(
     reservationNumber: string,
@@ -59,7 +69,7 @@ export class Reservation {
     children: number,
     totalPrice: number,
     pricePerDay: number,
-    reservationStatus: string
+    reservationStatus: ReservationStatus
   ) {
     this.reservationNumber = reservationNumber;
     this.name = name;
@@ -77,8 +87,8 @@ export class Reservation {
   }
 
   // 팩토리 메서드 추가
-  static create(props: Omit<Reservation, 'id'>): Reservation {
-    return new Reservation(
+  static create(props: Omit<Reservation, 'id' | 'confirm' | 'cancel'>): Reservation {
+    const reservation = new Reservation(
       props.reservationNumber,
       props.name,
       props.phoneNumber,
@@ -93,5 +103,20 @@ export class Reservation {
       props.pricePerDay,
       props.reservationStatus
     );
+    return reservation;
+  }
+
+  confirm() {
+    if (this.reservationStatus !== ReservationStatus.REQUEST) {
+      throw new Error('Can only confirm reservations with REQUEST status');
+    }
+    this.reservationStatus = ReservationStatus.CONFIRMED;
+  }
+
+  cancel() {
+    if (this.reservationStatus === ReservationStatus.CANCELLED) {
+      throw new Error('Reservation is already cancelled');
+    }
+    this.reservationStatus = ReservationStatus.CANCELLED;
   }
 }

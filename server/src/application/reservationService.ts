@@ -6,32 +6,22 @@ export class ReservationService {
   constructor(private reservationRepository: ReservationRepository) {}
 
   async createReservation(dto: CreateReservationDto): Promise<ReservationResponseDto> {
-    const reservation = new Reservation(
-      "",
-      this.generateReservationNumber(),
-      dto.name,
-      dto.phoneNumber,
-      dto.email,
-      new Date(dto.checkIn),
-      new Date(dto.checkOut),
-      dto.roomType,
-      dto.resortCode,
-      dto.adults,
-      dto.children,
-      dto.totalPrice,
-      dto.pricePerDay,
-      ReservationStatus.CONFIRMED
-    );
-
-    const savedReservation = await this.reservationRepository.createReservation(reservation);
-    
-
-    return {
-      id: savedReservation.id,
-      reservationNumber: savedReservation.reservationNumber,
+    const reservation = Reservation.create({
       ...dto,
+      reservationNumber: this.generateReservationNumber(),
+      checkIn: new Date(dto.checkIn),
+      checkOut: new Date(dto.checkOut),
       reservationStatus: ReservationStatus.CONFIRMED
-    };
+    });
+  
+    const savedReservation = await this.reservationRepository.createReservation(reservation);
+  
+    const { checkIn, checkOut, ...rest } = savedReservation;
+    return {
+      ...rest,
+      checkIn: checkIn.toISOString(),
+      checkOut: checkOut.toISOString()
+    } as ReservationResponseDto;
   }
 
   private generateReservationNumber(): string {
@@ -39,15 +29,15 @@ export class ReservationService {
     return `${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}${Math.floor(1000 + Math.random() * 9000)}`;
   }
 
-  async getReservation(id: string): Promise<ReservationResponseDto | null> {
+  async getReservation(id: number): Promise<ReservationResponseDto | null> {
     const reservation = await this.reservationRepository.findReservationById(id);
     if (!reservation) return null;
     
+    const { checkIn, checkOut, ...rest } = reservation;
     return {
-      id: reservation.id,
-      reservationNumber: reservation.reservationNumber,
-      name: reservation.name,
-      // ... 나머지 필드들
-    };
+      ...rest,
+      checkIn: checkIn.toISOString(),
+      checkOut: checkOut.toISOString()
+    } as ReservationResponseDto;
   }
 }
