@@ -3,14 +3,14 @@ import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import { appRouter } from './routes';
 
 export function createServer() {
-    const app = express();
+  const app = express();
 
-    app.use(
-        '/trpc',
-        createExpressMiddleware({
-            router: appRouter,
-        })
-    );
+  app.use(
+    '/trpc',
+    createExpressMiddleware({
+      router: appRouter,
+    })
+  );
 
-    return app;
+  return app;
 }
