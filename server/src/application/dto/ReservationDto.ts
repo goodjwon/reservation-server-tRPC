@@ -44,4 +44,15 @@ export const UpdateReservationStatusDto = z.object({
   reservationStatus: z.nativeEnum(ReservationStatus)
 });
 
+<<<<<<< HEAD:server/src/application/dto/reservationDto.ts
 export type UpdateReservationStatusDto = z.infer<typeof UpdateReservationStatusDto>;
+=======
+export type CreateReservationDtoType = z.infer<typeof CreateReservationDto>;
+
+export const ReservationResponseDto = CreateReservationDto.extend({
+  id: z.number(),
+  reservationNumber: z.string()
+});
+
+export type ReservationResponseDtoType = z.infer<typeof ReservationResponseDto>;
+>>>>>>> c11cfd4fd638bffe7571d43e9152d38b1483fabd:server/src/application/dto/ReservationDto.ts
