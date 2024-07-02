@@ -7,7 +7,6 @@ export class ReservationService {
 
   async createReservation(dto: CreateReservationDto): Promise<ReservationResponseDto> {
     const reservation = new Reservation(
-      "",
       this.generateReservationNumber(),
       dto.name,
       dto.phoneNumber,
@@ -22,14 +21,15 @@ export class ReservationService {
       dto.pricePerDay,
       ReservationStatus.CONFIRMED
     );
-
+  
     const savedReservation = await this.reservationRepository.createReservation(reservation);
-    
-
+  
     return {
       id: savedReservation.id,
       reservationNumber: savedReservation.reservationNumber,
       ...dto,
+      checkIn: savedReservation.checkIn.toISOString(),
+      checkOut: savedReservation.checkOut.toISOString(),
       reservationStatus: ReservationStatus.CONFIRMED
     };
   }
@@ -43,11 +43,11 @@ export class ReservationService {
     const reservation = await this.reservationRepository.findReservationById(id);
     if (!reservation) return null;
     
+    const { checkIn, checkOut, ...rest } = reservation;
     return {
-      id: reservation.id,
-      reservationNumber: reservation.reservationNumber,
-      name: reservation.name,
-      // ... 나머지 필드들
-    };
+      ...rest,
+      checkIn: checkIn.toISOString(),
+      checkOut: checkOut.toISOString()
+    } as ReservationResponseDto;
   }
 }
