@@ -13,7 +13,7 @@ export const CreateReservationDto = z.object({
   children: z.number().int().nonnegative(),
   totalPrice: z.number().positive(),
   pricePerDay: z.number().positive(),
-  reservationStatus: z.nativeEnum(ReservationStatus)
+  reservationStatus: z.enum(['REQUEST', 'CONFIRMED', 'CANCELLED'] as const)
 });
 
 export type CreateReservationDtoType = z.infer<typeof CreateReservationDto>;
