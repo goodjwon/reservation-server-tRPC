@@ -1,6 +1,7 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../interface/routes';
 import { CreateReservationDtoType } from '../application/dto/ReservationDto';
+import {transformer} from '../utils/transformer'
 
 const client = createTRPCProxyClient<AppRouter>({
   links: [
@@ -8,6 +9,7 @@ const client = createTRPCProxyClient<AppRouter>({
       url: 'http://localhost:3000/trpc',
     }),
   ],
+  transformer: transformer
 });
 
 describe('Reservation API', () => {

@@ -1,10 +1,13 @@
 import { initTRPC } from '@trpc/server';
+import { transformer } from '../../utils/transformer';
 import { z } from 'zod';
 import { ReservationService } from '../../application/services/ReservationService';
 import { ReservationRepository } from '../../infrastructure/persistence/ReservationRepository';
 import { CreateReservationDto } from '../../application/dto/ReservationDto';
 
-const t = initTRPC.create();
+export const t = initTRPC.create({
+    transformer: transformer,
+});
 
 const reservationRepository = new ReservationRepository();
 const reservationService = new ReservationService(reservationRepository);
