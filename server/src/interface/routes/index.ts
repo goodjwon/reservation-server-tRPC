@@ -1,6 +1,5 @@
 import { initTRPC } from '@trpc/server';
 import { transformer } from '../../utils/transformer';
-import { z } from 'zod';
 import { ReservationService } from '../../application/services/ReservationService';
 import { ReservationRepository } from '../../infrastructure/persistence/ReservationRepository';
 import { CreateReservationDto } from '../../application/dto/ReservationDto';
