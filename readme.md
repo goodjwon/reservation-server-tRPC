@@ -67,3 +67,27 @@ pnpm을 사용 할 거고 각 라이브러리는 호환성에 유의 해주고 �
 그리고 클라이언트와 서버 프로젝트는 각각 구성 했으면 좋겠어.
 
 서버 구동 및 단위 테스트 실행하는 방법 및 각 생성되는 파일 설명도 부탁해.
+
+서버 구동 커밋버전 77cdc5956787ae2a1f95fcba1958820525ae7a69
+
+```
+
+
+server >  git:(main) curl -X POST http://localhost:3000/trpc/createReservation \
+-H "Content-Type: application/json" \
+-d '{
+  "name": "홍길동",
+  "phoneNumber": "010-1234-5678",
+  "email": "example@abc.com",
+  "checkIn": "2023-07-01",
+  "checkOut": "2023-07-03",
+  "roomType": "Single",
+  "resortCode": "0010A",
+  "adults": 2,
+  "children": 1,
+  "totalPrice": 100000,
+  "pricePerDay": 50000,
+  "reservationStatus": "REQUEST"
+}'
+
+```
